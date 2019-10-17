@@ -14,7 +14,7 @@ class Agent(): #Mother class with the methods we will use both in player and ai 
         self.bust = False 
     
 
-    def rolls_count(self,rolls):
+    def list_count(self,rolls):
         counts = []
         for i in range(1,7):
             counts.append(rolls.count(i))
@@ -27,7 +27,7 @@ class Agent(): #Mother class with the methods we will use both in player and ai 
 
         print(self.rolls)
         self.bust = True
-        counts = self.rolls_count(self.rolls)
+        counts = self.list_count(self.rolls)
         for count in counts:
             if count < 3:
                 pass
@@ -53,17 +53,29 @@ class Player(Agent):
         selections = []
         selections = input('Select the index of the dices you want to score, comma separated: ').split(',')
         print(selections)
+       
+                
         try:
             selections = list(map(int,selections))
-            print('Selected: ', end=" ", flush=True)
-            for sel in selections:
-                print(str(self.rolls[sel-1]), end=" ", flush=True)
-            print('\n')
-            new_rolls = []
-            for sel in selections:
-                new_rolls.append(self.rolls[sel-1])
-            counts = self.rolls_count(new_rolls)
-            self.score(counts)  
+            repetida = False
+            count_sel = self.list_count(selections)
+            for count in count_sel:
+                if count > 1:
+                    repetida = True #you selected the same dice >1 times
+                    
+            if repetida:
+                print("You selected the same dice 1+ times. Please select again\n")
+                self.select()
+            else:
+                print('Selected: ', end=" ", flush=True)
+                for sel in selections:
+                    print(str(self.rolls[sel-1]), end=" ", flush=True)
+                print('\n')
+                new_rolls = []
+                for sel in selections:
+                    new_rolls.append(self.rolls[sel-1])
+                counts = self.list_count(new_rolls)
+                self.score(counts)  
         except ValueError:
             print("Please select at least one dice.")
             self.select()
@@ -94,6 +106,7 @@ class Player(Agent):
     
         print("Player's round: %d\n"%(self.round_score))
         print("Player's total score: %d\n"%(self.points))
+        
         self.Pass(counts)
 
     def Pass(self,counts):
@@ -118,7 +131,7 @@ class AI(Agent):
     def decision(self):
         current_score = 0
         future_score = 0
-        counts = self.rolls_count(self.rolls)
+        counts = self.list_count(self.rolls)
         print(counts)
         combos = []
         for count in counts:
@@ -174,8 +187,8 @@ def main():
 
     if option == 3:
         print("PvAI\n")
-        player = Player(0,6,0,0,1000)
-        ai = AI(0,6,0,0,1000)
+        player = Player(0,6,0,0,4000)
+        ai = AI(0,6,0,0,4000)
         while not player.win() and not ai.win():
             print("Player's round")
             while not player.stop:
