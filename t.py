@@ -1,18 +1,7 @@
-class person():
-    def __init__(self,sex,age):
-        self.age = age
-        self.sex = sex
-    def getAge(self):
-        print("Age = %d"%(self.age))
-    def getSex(Self):
-        print("Sex = %s"%(self.sex))
+l = [1,2,3]
 
-class Male(person):
-    self.oi = 'oi'
-    def oi(self):
-        print(self.oi)
-
-lucas =  person('m',19)
-lucas = Male('m')
-lucas.getAge()
-lucas.oi()
+def oi(x):
+    return x == 2
+    
+a= list(filter(oi,l))
+print(a)
